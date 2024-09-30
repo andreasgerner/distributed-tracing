@@ -1,0 +1,149 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro1-deployment
+  labels:
+    app: micro1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro1
+  template:
+    metadata:
+      labels:
+        app: micro1
+      annotations:
+        "instrumentation.opentelemetry.io/inject-java": "true"
+    spec:
+      containers:
+        - name: micro1
+          image: micro1:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MICRO2_URL
+              value: "http://micro2-service:8080"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro1-service
+  labels:
+    app: micro1
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: micro1
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: micro1-ingress
+spec:
+  rules:
+    - host: micro1.localhost
+      http:
+        paths:
+          - backend:
+              service:
+                name: micro1-service
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro2-deployment
+  labels:
+    app: micro2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro2
+  template:
+    metadata:
+      labels:
+        app: micro2
+      annotations:
+        "instrumentation.opentelemetry.io/inject-java": "true"
+    spec:
+      containers:
+        - name: micro2
+          image: micro2:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro2-service
+  labels:
+    app: micro2
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: micro2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: web:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    app: web
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+spec:
+  rules:
+    - host: web.localhost
+      http:
+        paths:
+          - backend:
+              service:
+                name: web-service
+                port:
+                  name: http
+            pathType: ImplementationSpecific
