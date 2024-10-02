@@ -8,13 +8,13 @@ Add Opentelemetry Operator:
 `helm install opentelemetry-operator opentelemetry-operator --repo https://open-telemetry.github.io/opentelemetry-helm-charts  -n otel --create-namespace --set "manager.collectorImage.repository=otel/opentelemetry-collector-k8s"`
 
 Add Opentelemetry Collector:
-`kubectl apply -f 00-opentelemetry-collector.yml -n otel`
+`kubectl apply -f 01-opentelemetry-collector.yml -n otel`
 
-Add Jaeger Operator:
-`helm install jaeger-operator jaeger-operator --repo https://jaegertracing.github.io/helm-charts  -n jaeger --create-namespace --set "rbac.clusterRole=true"`
+Add ElasticSearch:
+`helm install elasticsearch oci://registry-1.docker.io/bitnamicharts/elasticsearch -n eks --create-namespace -f values-elasticsearch.yml`
 
 Add Jaeger:
-`kubectl apply -f 01-jaeger.yml -n jaeger`
+`helm install jaeger jaeger --repo https://jaegertracing.github.io/helm-charts  -n jaeger --create-namespace -f values-jaeger.yml`
 
 Add Instrumentation:
 `kubectl apply -f 02-instrumentation.yml`

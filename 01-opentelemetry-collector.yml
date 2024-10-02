@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: opentelemetry-collector
+  name: opentelemetry
 spec:
   config: |
     receivers:
@@ -67,7 +67,7 @@ spec:
         paths:
           - backend:
               service:
-                name: opentelemetry-collector-collector
+                name: opentelemetry-collector
                 port:
                   name: otlp-http
             pathType: ImplementationSpecific

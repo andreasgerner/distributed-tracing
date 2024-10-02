@@ -1,0 +1,24 @@
+provisionDataStore:
+  cassandra: false
+storage:
+  type: elasticsearch
+  elasticsearch:
+    host: elasticsearch.eks.svc.cluster.local
+    port: 9200
+    scheme: http
+    user: jaeger
+    password: j43g3r2024
+query:
+  ingress:
+    enabled: true
+    hosts:
+      - jaeger.localhost
+collector:
+  service:
+    otlp:
+      grpc:
+        name: otlp-grpc
+        port: 4317
+      http:
+        name: otlp-http
+        port: 4138

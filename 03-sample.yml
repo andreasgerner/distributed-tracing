@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: micro1
-          image: micro1:latest
+          image: ghcr.io/andreasgerner/distributed-tracing/sample-micro1:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: MICRO2_URL
@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
         - name: micro2
-          image: micro2:latest
+          image: ghcr.io/andreasgerner/distributed-tracing/sample-micro2:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -113,7 +113,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: web:latest
+          image: ghcr.io/andreasgerner/distributed-tracing/sample-web:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
