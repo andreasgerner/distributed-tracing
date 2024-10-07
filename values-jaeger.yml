@@ -3,7 +3,7 @@ provisionDataStore:
 storage:
   type: elasticsearch
   elasticsearch:
-    host: elasticsearch.eks.svc.cluster.local
+    host: elasticsearch.elastic.svc.cluster.local
     port: 9200
     scheme: http
     user: jaeger
