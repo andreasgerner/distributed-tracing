@@ -3,7 +3,13 @@
 Dieses Repository enthält alle Informationen über meine Bachelorarbeit zu Distributed Tracing, die zusammen mit der
 NÜRNBERGER Versicherung entsteht.
 
-**🚧 Work in Progress:** Die Arbeit ist noch nicht abgeschlossen! 
+**🚧 Work in Progress:** Die Arbeit ist noch nicht abgeschlossen!
+
+## 📚 Kapitel
+
+* [🧪 Proof of Concept in einem lokalen k8s-Cluster](#-proof-of-concept-in-einem-lokalen-k8s-cluster)
+* [🎪 Aufbau der Beispielanwendung](#-aufbau-der-beispielanwendung)
+* [🐧 Änderungen zur Verwendung in einem OpenShift-Cluster](#-änderungen-zur-verwendung-in-einem-openshift-cluster)
 
 ## 🧪 Proof of Concept in einem lokalen k8s-Cluster
 
@@ -15,20 +21,20 @@ NÜRNBERGER Versicherung entsteht.
 
 ### Implementierung:
 
-#### 1. Certmanager
-
-Certmanager erstellt und verwaltet TLS-Zertifikate für Workloads im Cluster.
-
-```shell
-helm install cert-manager cert-manager --repo https://charts.jetstack.io -n cert-manager --create-namespace --set "crds.enabled=true"
-```
-
-#### 2. Traefik
+#### 1. Traefik
 
 Traefik erstellt Tracing-Daten zu angelegten Ingress-Routen und exportiert diese an OpenTelemetry.
 
 ```shell
 helm install traefik traefik --repo https://traefik.github.io/charts  -n traefik --create-namespace -f values-traefik.yml
+```
+
+#### 2. Certmanager
+
+Certmanager erstellt und verwaltet TLS-Zertifikate für Workloads im Cluster. Wird vom Opentelemetry Operator benötigt.
+
+```shell
+helm install cert-manager cert-manager --repo https://charts.jetstack.io -n cert-manager --create-namespace --set "crds.enabled=true"
 ```
 
 #### 3. OpenTelemetry
@@ -81,3 +87,53 @@ der Praxis aussehen und verwendet werden können.
 ```shell
 kubectl apply -f 03-sample.yml
 ```
+
+### Darauf resultierende Architektur:
+
+![Diagramm der lokalen Architektur](docs/local-architecture.drawio.svg)
+
+## 🎪 Aufbau der Beispielanwendung
+
+Die Beispielanwendung besteht aus drei einzelnen Deployments:
+
+- Web-Oberfläche (Nginx + Angular CSR)
+- Microservice 1 (Spring)
+- Microservice 2 (Spring)
+
+### Schaubild über Zusammenspiel der Komponenten
+
+![Diagramm der Anwendung](docs/sample-app.drawio.svg)
+
+### Instrumentalisierung der einzelnen Komponenten
+
+#### Web-Anwendung
+
+Keine automatische Instrumentalisierung von Nginx oder Angular, stattdessen wurde OpenTelemetry vor dem Build der
+Anwendung händisch eingebunden.
+
+Um die Traceparent-Informationen, die von Traefik bereitgestellt werden, zu verwenden und anzubinden, wird dieser Header
+von Nginx in die Meta-Tags der Anwendung gespeichert.
+
+Die Anwendung nutzt alle Instrumentalisierungen, die von `@opentelemetry/auto-instrumentations-web` bereitgestellt
+werden.
+
+#### Microservice 1
+
+Verwendung von automatischer Instrumentalisierung und zusätzlich eigene Spans per Annotation.
+
+Die Anwendung wird bei Deployment automatisch instrumentalisiert, allerdings wurde zusätzlich noch ein Span über die
+`getName`-Methode gelegt, die den Namen von Microservice 2 lädt.
+
+#### Microservice 2
+
+Reine Verwendung der automatischen Instrumentalisierung.
+
+Hier wurden keine OpenTelemetry-Dependencies eingebunden. Die Instrumentalisierung erfolgt vollständig beim Deployment.
+
+## 🐧 Änderungen zur Verwendung in einem OpenShift-Cluster
+
+OpenShift stellt einen eigenen, angepassten Build des OpenTelemetry Operators bereit. Dieser kann
+anhand [dieser Anleitung](https://docs.openshift.com/container-platform/4.12/observability/otel/otel-installing.html)
+bereitgestellt werden.
+
+Dadurch entfällt außerdem die Installation von Cert-Manager, da dieser Build die Zertifikate selbst bereitstellt.
