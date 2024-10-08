@@ -84,10 +84,6 @@ kubectl apply -f 02-instrumentation.yml
 Eine Testanwendung mit Angular-Weboberfläche und zwei Java-Microservices als Backend repräsentiert, wie Tracing-Daten in
 der Praxis aussehen und verwendet werden können.
 
-```shell
-kubectl apply -f 03-sample.yml
-```
-
 > ❗ **Achtung**
 >
 > Die Beispiel-Anwendung kommuniziert mit einer Microsoft SQL Server Datenbank, die im Voraus bereitgestellt werden
@@ -96,6 +92,10 @@ kubectl apply -f 03-sample.yml
 > ```shell
 > docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrongPassword1!" -p 1433:1433 --name sample-app-mssql -d mcr.microsoft.com/mssql/server:latest
 > ```
+
+```shell
+kubectl apply -f 03-sample.yml
+```
 
 ### Darauf resultierende Architektur:
 
