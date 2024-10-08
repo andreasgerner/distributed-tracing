@@ -17,7 +17,8 @@ public class HelloController {
     @CrossOrigin
     @GetMapping("/hello")
     public Mono<String> getHello() {
-        return helloComponent.fetchHelloName();
+        String greeting = helloComponent.getGreeting();
+        return helloComponent.getName().map(name -> "%s %s!".formatted(greeting, name));
     }
 
 }

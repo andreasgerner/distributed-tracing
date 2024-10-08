@@ -88,6 +88,15 @@ der Praxis aussehen und verwendet werden können.
 kubectl apply -f 03-sample.yml
 ```
 
+> ❗ **Achtung**
+>
+> Die Beispiel-Anwendung kommuniziert mit einer Microsoft SQL Server Datenbank, die im Voraus bereitgestellt werden
+> muss.
+> Folgender Befehl startet einen Container, der mit der im Deployment hinterlegten Connection URL übereinstimmt.
+> ```shell
+> docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrongPassword1!" -p 1433:1433 --name sample-app-mssql -d mcr.microsoft.com/mssql/server:latest
+> ```
+
 ### Darauf resultierende Architektur:
 
 ![Diagramm der lokalen Architektur](docs/local-architecture.drawio.svg)
@@ -121,8 +130,8 @@ werden.
 
 Verwendung von automatischer Instrumentalisierung und zusätzlich eigene Spans per Annotation.
 
-Die Anwendung wird bei Deployment automatisch instrumentalisiert, allerdings wurde zusätzlich noch ein Span über die
-`getName`-Methode gelegt, die den Namen von Microservice 2 lädt.
+Die Anwendung wird bei Deployment automatisch instrumentalisiert, allerdings wurde zusätzlich noch ein Span über einige
+Methoden gelegt.
 
 #### Microservice 2
 
@@ -134,6 +143,6 @@ Hier wurden keine OpenTelemetry-Dependencies eingebunden. Die Instrumentalisieru
 
 OpenShift stellt einen eigenen, angepassten Build des OpenTelemetry Operators bereit. Dieser kann
 anhand [dieser Anleitung](https://docs.openshift.com/container-platform/4.12/observability/otel/otel-installing.html)
-bereitgestellt werden.
+verfügbar gemacht werden.
 
 Dadurch entfällt außerdem die Installation von Cert-Manager, da dieser Build die Zertifikate selbst bereitstellt.

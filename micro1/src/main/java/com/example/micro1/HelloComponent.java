@@ -13,13 +13,17 @@ public class HelloComponent {
     private String baseUrl;
 
     @WithSpan
-    public Mono<String> fetchHelloName() {
+    public Mono<String> getName() {
         return WebClient.create(baseUrl)
                 .get()
                 .uri("/name")
                 .retrieve()
-                .bodyToMono(String.class)
-                .map("Hello %s"::formatted);
+                .bodyToMono(String.class);
+    }
+
+    @WithSpan
+    public String getGreeting() {
+        return "Hello";
     }
 
 }

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: micro2
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: ${DB_URL}
+
+  jpa:
+    hibernate:
+      ddl-auto: create

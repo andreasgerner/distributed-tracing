@@ -1,15 +1,18 @@
 package com.example.micro2;
 
-import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Component
 public class NameComponent {
 
-    @WithSpan
-    public Mono<String> getName() {
-        return Mono.just("Andreas");
+    private final NameRepository nameRepository;
+
+    public NameComponent(NameRepository nameRepository) {
+        this.nameRepository = nameRepository;
+    }
+
+    public String getName() {
+        return nameRepository.findById(0L).map(NameEntity::getName).orElse("World");
     }
 
 }
