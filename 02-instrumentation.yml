@@ -14,10 +14,6 @@ spec:
     argument: "1"
   resource:
     addK8sUIDAttributes: true
-  python:
-    env:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://opentelemetry-collector.otel.svc.cluster.local:4318
   java:
     env:
       - name: OTEL_LOGS_EXPORTER
