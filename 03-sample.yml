@@ -14,6 +14,7 @@ spec:
       labels:
         app: micro1
       annotations:
+        "resource.opentelemetry.io/service.name": "micro1"
         "instrumentation.opentelemetry.io/inject-java": "true"
     spec:
       containers:
@@ -72,6 +73,7 @@ spec:
       labels:
         app: micro2
       annotations:
+        "resource.opentelemetry.io/service.name": "micro2"
         "instrumentation.opentelemetry.io/inject-java": "true"
     spec:
       containers:
