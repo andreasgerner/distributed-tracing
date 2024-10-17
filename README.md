@@ -109,6 +109,19 @@ Die Beispielanwendung besteht aus drei einzelnen Deployments:
 - Microservice 1 (Spring)
 - Microservice 2 (Spring)
 
+Jaeger kann nach einigen erzeugten Traces automatisch einen Graph über die Systemarchitektur erstellen.
+Dafür muss folgender Container ausgeführt werden (einmalig, beendet sich nach Berechnung selbst):
+
+```shell
+kubectl port-forward service/elasticsearch 9200:9200 & \
+docker run --name jaeger-deps --env STORAGE="elasticsearch" --env ES_NODES="http://host.docker.internal:9200" ghcr.io/jaegertracing/spark-dependencies/spark-dependencies
+```
+
+> ❗ **Achtung**
+>
+> kubectl läuft im Hintergrund weiter, wobei die Prozess-ID in der Konsole ausgegeben wird. Der Prozess kann
+> `kill -9 [PID]` terminiert werden.
+
 ### Schaubild über Zusammenspiel der Komponenten
 
 ![Diagramm der Anwendung](docs/sample-app.drawio.svg)

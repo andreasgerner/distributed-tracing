@@ -27,7 +27,7 @@ registerInstrumentations({
   instrumentations: [
     getWebAutoInstrumentations({
       "@opentelemetry/instrumentation-xml-http-request": {
-        propagateTraceHeaderCorsUrls: [new RegExp("micro1.localhost")]
+        propagateTraceHeaderCorsUrls: [new RegExp("micro1.localhost"), new RegExp("micro2.localhost")]
       }
     })],
 });

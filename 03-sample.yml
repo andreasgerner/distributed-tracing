@@ -100,6 +100,22 @@ spec:
   selector:
     app: micro2
 ---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: micro2-ingress
+spec:
+  rules:
+    - host: micro2.localhost
+      http:
+        paths:
+          - backend:
+              service:
+                name: micro2-service
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,2 +1,9 @@
-<h1>{{text}}</h1>
-<button (click)="loadText()" id="load-text-button">Text laden</button>
+<div class="text-wrapper">
+    <p>{{text}}</p>
+    <button (click)="loadText()" id="load-text-button">Begrüßung laden</button>
+</div>
+
+<div class="change-wrapper">
+    <input id="name" type="text" placeholder="Neuer Name" [formControl]="name">
+    <button (click)="saveName()">Speichern</button>
+</div>
