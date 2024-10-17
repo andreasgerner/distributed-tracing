@@ -113,7 +113,7 @@ Jaeger kann nach einigen erzeugten Traces automatisch einen Graph über die Syst
 Dafür muss folgender Container ausgeführt werden (einmalig, beendet sich nach Berechnung selbst):
 
 ```shell
-kubectl port-forward service/elasticsearch 9200:9200 & \
+kubectl port-forward -n elastic service/elasticsearch 9200:9200 & \
 docker run --name jaeger-deps --env STORAGE="elasticsearch" --env ES_NODES="http://host.docker.internal:9200" ghcr.io/jaegertracing/spark-dependencies/spark-dependencies
 ```
 
