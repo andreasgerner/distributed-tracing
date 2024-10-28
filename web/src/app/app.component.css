@@ -1,30 +1,45 @@
-.text-wrapper, .change-wrapper {
+.title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #0e2c4f;
+}
+
+.company-table {
+    padding: 1rem;
+    background-color: #eeeeee;
+    border-spacing: 3rem 1rem;
+}
+
+.company-table thead {
+    border-top: 1px solid black;
+}
+
+.company-table .load-company {
+    text-decoration: underline;
+}
+
+.popover {
+    position: absolute;
+    inset: 0 0 0 0;
+    background-color: #00000040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popover .content {
+    background-color: #ffffff;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 350px;
-    padding: 1rem;
-    margin: 2rem;
-    background-color: #efefef;
-    border-radius: .25rem;
+    min-width: 900px;
     gap: 1rem;
-    box-shadow: 0 0 3px #555555;
 }
 
-.text-wrapper p, .change-wrapper input {
-    width: 100%;
-    background-color: #ffffff;
-    padding: 1rem;
-    border-radius: .25rem;
+.popover .content .header {
+    display: flex;
+    justify-content: space-between;
+    color: #0e2c4f;
 }
 
-.change-wrapper input {
-    border: none;
-}
-
-button {
-    background-color: #ffffff;
-    padding: .25rem .5rem;
-    border-radius: .25rem;
-    border: 1px solid #333333;
-}

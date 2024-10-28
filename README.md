@@ -86,11 +86,12 @@ der Praxis aussehen und verwendet werden können.
 
 > ❗ **Achtung**
 >
-> Die Beispiel-Anwendung kommuniziert mit einer Microsoft SQL Server Datenbank, die im Voraus bereitgestellt werden
-> muss.
-> Folgender Befehl startet einen Container, der mit der im Deployment hinterlegten Connection URL übereinstimmt.
+> Die Beispiel-Anwendung kommuniziert mit zwei Microsoft SQL Server Datenbanken, die im Voraus bereitgestellt werden
+> müssen.
+> Folgender Befehl startet zwei Container, die mit der im Deployment hinterlegten Connection URL übereinstimmt.
 > ```shell
-> docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrongPassword1!" -p 1433:1433 --name sample-app-mssql -d mcr.microsoft.com/mssql/server:latest
+> docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrongPassword1!" -p 10001:1433 --name sample-company-mssql -d mcr.microsoft.com/mssql/server:latest && \
+> docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrongPassword1!" -p 10002:1433 --name sample-payment-mssql -d mcr.microsoft.com/mssql/server:latest
 > ```
 
 ```shell

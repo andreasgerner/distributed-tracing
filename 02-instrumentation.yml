@@ -3,6 +3,11 @@ kind: Instrumentation
 metadata:
   name: sample-instrumentation
 spec:
+  env:
+    - name: OTEL_METRICS_EXPORTER
+      value: none
+    - name: OTEL_LOGS_EXPORTER
+      value: none
   exporter:
     endpoint: http://opentelemetry-collector.otel.svc.cluster.local:4317
   propagators:
@@ -14,7 +19,3 @@ spec:
     argument: "1"
   resource:
     addK8sUIDAttributes: true
-  java:
-    env:
-      - name: OTEL_LOGS_EXPORTER
-        value: otlp

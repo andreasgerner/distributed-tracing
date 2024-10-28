@@ -1,9 +1,37 @@
-<div class="text-wrapper">
-    <p>{{text}}</p>
-    <button (click)="loadText()" id="load-text-button">Begrüßung laden</button>
+<div class="title">
+    <img ngSrc="./icon.svg" alt="Logo der Nürnberger Versicherung" width="40" height="40">
+    <h1>Beitragsverwaltung</h1>
 </div>
-
-<div class="change-wrapper">
-    <input id="name" type="text" placeholder="Neuer Name" [formControl]="name">
-    <button (click)="saveName()">Speichern</button>
+<table class="company-table">
+    <thead>
+    <tr>
+        <th>Firmenname</th>
+        <th>Aktionen</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let company of companies">
+        <td>{{ company.name }}</td>
+        <td>
+            <button class="load-company" (click)="loadCompanyDetails(company.id)">Details anzeigen</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="popover" *ngIf="company">
+    <div class="content">
+        <div class="header">
+            <h1>{{ company.name }}</h1>
+            <button (click)="closeDetails()" class="close">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                     fill="#000000">
+                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </button>
+        </div>
+        <div>
+            <p>Bisherige Beitragszahlungen:</p>
+            <p *ngFor="let payment of company?.payments">{{ payment.amount | currency: 'EUR' }}</p>
+        </div>
+    </div>
 </div>

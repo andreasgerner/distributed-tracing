@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: company-micro
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: ${DB_URL}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+payment:
+  url: ${PAYMENT_URL}

@@ -1,36 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { CurrencyPipe, NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
+import { Company } from "../lib/types";
 import { HttpClient } from "@angular/common/http";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
   imports: [
-    ReactiveFormsModule
-  ]
+    NgForOf,
+    NgIf,
+    CurrencyPipe,
+    NgOptimizedImage
+  ],
+  styleUrl: './app.component.css'
 })
-export class AppComponent {
-  text = "Nicht geladen"
-  name = new FormControl('')
+export class AppComponent implements OnInit {
+
+  companies?: Company[];
+  company?: Company;
 
   constructor(private http: HttpClient) {
   }
 
-  loadText() {
-    this.http.get("http://micro1.localhost/hello", {responseType: "text"})
-      .subscribe(value => {
-        this.text = value
-      })
+  ngOnInit() {
+    this.http.get<Company[]>('http://company.localhost/companies')
+      .subscribe(res => this.companies = res);
   }
 
-  saveName() {
-    this.http.post("http://micro2.localhost/name", {
-      name: this.name.value
-    })
-      .subscribe(() => {
-        this.name.reset()
-      })
+  loadCompanyDetails(id: number) {
+    this.http.get<Company>(`http://company.localhost/companies/${id}`)
+      .subscribe(res => this.company = res);
+  }
+
+  closeDetails() {
+    this.company = undefined;
   }
 }

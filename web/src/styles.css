@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "Nuernberger Text";
+    font-weight: normal;
+    src: url("fonts/NuernbergerText-Regular.woff2");
+}
+
 * {
     box-sizing: border-box;
 }
@@ -14,8 +20,18 @@ app-root {
     height: 100vh;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 3rem;
+    font-family: "Nuernberger Text", sans-serif;
 }
 
 h1, h2, p {
     margin: 0;
+}
+
+button {
+    border: 0;
+    background-color: transparent;
+    font-size: 1rem;
+    cursor: pointer;
 }
