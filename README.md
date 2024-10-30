@@ -107,8 +107,8 @@ kubectl apply -f 03-sample.yml
 Die Beispielanwendung besteht aus drei einzelnen Deployments:
 
 - Web-Oberfläche (Nginx + Angular CSR)
-- Microservice 1 (Spring)
-- Microservice 2 (Spring)
+- Microservice company (Spring)
+- Microservice payment (Spring)
 
 Jaeger kann nach einigen erzeugten Traces automatisch einen Graph über die Systemarchitektur erstellen.
 Dafür muss folgender Container ausgeführt werden (einmalig, beendet sich nach Berechnung selbst):
@@ -140,14 +140,14 @@ von Nginx in die Meta-Tags der Anwendung gespeichert.
 Die Anwendung nutzt alle Instrumentalisierungen, die von `@opentelemetry/auto-instrumentations-web` bereitgestellt
 werden.
 
-#### Microservice 1
+#### Microservice company
 
 Verwendung von automatischer Instrumentalisierung und zusätzlich eigene Spans per Annotation.
 
-Die Anwendung wird bei Deployment automatisch instrumentalisiert, allerdings wurde zusätzlich noch ein Span über einige
-Methoden gelegt.
+Die Anwendung wird bei Deployment automatisch instrumentalisiert, allerdings wurde zusätzlich noch ein Span über eine
+Methode gelegt und ein zusätzliches Attribut hinzugefügt.
 
-#### Microservice 2
+#### Microservice payment
 
 Reine Verwendung der automatischen Instrumentalisierung.
 
