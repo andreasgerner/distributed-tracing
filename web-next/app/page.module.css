@@ -1,0 +1,32 @@
+.page {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #0e2c4f;
+}
+
+.table {
+  padding: 1rem;
+  background-color: #eeeeee;
+  border-spacing: 3rem 1rem;
+}
+
+.table thead {
+  border-top: 1px solid black;
+}
+
+.load {
+  text-decoration: underline;
+}
+

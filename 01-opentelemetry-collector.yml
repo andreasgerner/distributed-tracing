@@ -48,6 +48,7 @@ spec:
       - "content-type"
       - "*"
     accessControlAllowOriginList:
+      - "http://localhost:3000"
       - "http://localhost:4200"
       - "http://web.localhost"
     accessControlAllowCredentials: true
