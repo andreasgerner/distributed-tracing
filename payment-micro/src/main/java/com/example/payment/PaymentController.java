@@ -1,13 +1,15 @@
 package com.example.payment;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class PaymentController {
 
     private final PaymentRepository paymentRepository;
@@ -16,10 +18,27 @@ public class PaymentController {
         this.paymentRepository = paymentRepository;
     }
 
-    @GetMapping("/payments")
-    public ResponseEntity<List<Payment>> getPayments(@RequestParam("companyId") long companyId) {
-        final List<Payment> payments = paymentRepository.findAllByCompanyId(companyId);
+    @GetMapping("/payments/{id}")
+    public ResponseEntity<List<Payment>> getPayments(@PathVariable long id) {
+        final List<Payment> payments = paymentRepository.findAllByCompanyId(id);
         return ResponseEntity.ok(payments);
+    }
+
+    public record AddPaymentDTO(double amount) {
+    }
+
+    @PutMapping(value = "/payments/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addPayment(@PathVariable long id,
+                                           @RequestBody AddPaymentDTO body) throws URISyntaxException {
+        int temp = (int) (body.amount * 100.0);
+        double trimmedAmount = ((double) temp) / 100.0;
+
+        final Payment payment = new Payment();
+        payment.setCompanyId(id);
+        payment.setAmount(trimmedAmount);
+
+        paymentRepository.saveAndFlush(payment);
+        return ResponseEntity.created(new URI("/payments/" + id)).build();
     }
 
 }

@@ -1,14 +1,5 @@
-.popover {
-    position: absolute;
-    inset: 0 0 0 0;
-    background-color: #00000040;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .content {
-    background-color: #ffffff;
+    background-color: #eeeeee;
     padding: 2rem;
     display: flex;
     flex-direction: column;

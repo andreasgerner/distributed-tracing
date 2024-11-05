@@ -1,9 +1,9 @@
-.table {
+table {
     padding: 1rem;
     background-color: #eeeeee;
     border-spacing: 3rem 1rem;
 }
 
-.table thead {
+thead {
     border-top: 1px solid black;
 }

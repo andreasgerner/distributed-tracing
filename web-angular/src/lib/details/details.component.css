@@ -1,0 +1,14 @@
+.content {
+    background-color: #eeeeee;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 900px;
+    gap: 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    color: #0e2c4f;
+}

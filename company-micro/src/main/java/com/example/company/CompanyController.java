@@ -42,17 +42,4 @@ public class CompanyController {
         return ResponseEntity.ok(company.toPaymentsDto());
     }
 
-    public record SetCompanyDTO(String name) {
-    }
-
-    @PostMapping("/companies/{id}")
-    public ResponseEntity<Company> setCompany(@PathVariable long id, @RequestBody SetCompanyDTO body) {
-        final Company company = companyRepository.findCompanyById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        company.setName(body.name());
-        companyRepository.saveAndFlush(company);
-
-        return ResponseEntity.ok(company);
-    }
-
 }

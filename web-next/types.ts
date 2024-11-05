@@ -1,8 +1,8 @@
-export type Company = {
+export interface Company {
   id: number,
   name: string,
-  payments?: Array<{
+  payments?: {
     id: number,
     amount: number
-  }>
+  }[]
 }

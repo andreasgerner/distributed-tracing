@@ -1,0 +1,16 @@
+<table>
+    <thead>
+    <tr>
+        <th>Firmenname</th>
+        <th>Aktionen</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let company of companies">
+        <td>{{ company.name }}</td>
+        <td>
+            <a [href]="'/' + company.id">Details anzeigen</a>
+        </td>
+    </tr>
+    </tbody>
+</table>

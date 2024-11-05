@@ -16,7 +16,7 @@ public class PaymentClient {
 
     @WithSpan
     public List<Company.Payment> getPayments(long companyId) {
-        final String uri = "/payments?companyId=%d".formatted(companyId);
+        final String uri = "/payments/%d".formatted(companyId);
 
         Span span = Span.current();
         span.setAttribute("request.url", baseUrl + uri);

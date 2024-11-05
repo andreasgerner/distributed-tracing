@@ -1,7 +1,9 @@
 import React from "react";
 import localFont from "next/font/local";
 import { Metadata } from "next";
-import './global.css';
+import "./global.css";
+import styles from "@/app/layout.module.css";
+import Image from "next/image";
 
 const nbgFont = localFont({
   src: "./fonts/NuernbergerText-Regular.woff2",
@@ -18,7 +20,13 @@ export default function RootLayout({children}: Readonly<{
   return (
     <html lang="de">
     <body className={nbgFont.className}>
-    {children}
+    <div className={styles.page}>
+      <div className={styles.title}>
+        <Image src="./icon.svg" alt="Logo der Nürnberger Versicherung" width="40" height="40"/>
+        <h1>Beitragsverwaltung</h1>
+      </div>
+      {children}
+    </div>
     </body>
     </html>
   );

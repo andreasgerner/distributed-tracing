@@ -1,0 +1,7 @@
+<form (ngSubmit)="addPayment()" [formGroup]="addPaymentForm">
+    <p>Neue Beitragszahlung hinzufügen:</p>
+    <div>
+        <input formControlName="amount" id="amount" min="0.01" step="0.01" type="number"/>
+        <button type="submit">Hinzufügen</button>
+    </div>
+</form>
