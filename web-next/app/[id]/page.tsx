@@ -4,7 +4,9 @@ import Link from "next/link";
 import AddPayment from "@/app/lib/add-payment";
 
 export default async function Details({params}: { params: Promise<{ id: string }> }) {
-  const res = await fetch(`http://company.localhost/companies/${(await params).id}`);
+  if (!process.env.COMPANY_URL) return;
+
+  const res = await fetch(`${process.env.COMPANY_URL}/companies/${(await params).id}`);
   const company: Company = await res.json();
 
   const formatter = new Intl.NumberFormat("de-DE", {

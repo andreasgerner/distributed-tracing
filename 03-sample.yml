@@ -82,11 +82,11 @@ spec:
         - name: payment
           image: ghcr.io/andreasgerner/distributed-tracing/sample-payment:latest
           imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 8080
           env:
             - name: DB_URL
               value: jdbc:sqlserver://host.docker.internal:10002;encrypt=true;trustServerCertificate=true;username=sa;password=yourStrongPassword1!;
+          ports:
+            - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -121,22 +121,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment
+  name: web-angular-deployment
   labels:
-    app: web
+    app: web-angular
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web
+      app: web-angular
   template:
     metadata:
       labels:
-        app: web
+        app: web-angular
     spec:
       containers:
-        - name: web
-          image: ghcr.io/andreasgerner/distributed-tracing/sample-web:latest
+        - name: web-angular
+          image: ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
@@ -144,29 +144,90 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-service
+  name: web-angular-service
   labels:
-    app: web
+    app: web-angular
 spec:
   ports:
     - name: http
       port: 80
       targetPort: 80
   selector:
-    app: web
+    app: web-angular
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-ingress
+  name: web-angular-ingress
 spec:
   rules:
-    - host: web.localhost
+    - host: web-angular.localhost
       http:
         paths:
           - backend:
               service:
-                name: web-service
+                name: web-angular-service
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-next-deployment
+  labels:
+    app: web-next
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-next
+  template:
+    metadata:
+      labels:
+        app: web-next
+      annotations:
+        "resource.opentelemetry.io/service.name": "web-next"
+        "instrumentation.opentelemetry.io/inject-nodejs": "true"
+    spec:
+      containers:
+        - name: web-next
+          image: ghcr.io/andreasgerner/distributed-tracing/sample-web-next:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: COMPANY_URL
+              value: "http://company-service:8080"
+            - name: PAYMENT_URL
+              value: "http://payment-service:8080"
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-next-service
+  labels:
+    app: web-next
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  selector:
+    app: web-next
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-next-ingress
+spec:
+  rules:
+    - host: web-next.localhost
+      http:
+        paths:
+          - backend:
+              service:
+                name: web-next-service
                 port:
                   name: http
             pathType: ImplementationSpecific

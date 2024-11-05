@@ -17,6 +17,7 @@ const routes: Routes = [
   {
     path: ":id",
     component: DetailsComponent,
+    runGuardsAndResolvers: "always",
     resolve: {
       company: DetailsResolver
     }

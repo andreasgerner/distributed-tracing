@@ -11,18 +11,17 @@ import java.util.List;
 @Setter
 public class Company {
 
-
     public record CompanyDto(long id, String name) {
     }
 
-    public record Payment(long id, double amount) {
+    public record PaymentDto(double amount) {
     }
 
-    public record CompanyWithPaymentsDto(long id, String name, List<Payment> payments) {
+    public record CompanyWithPaymentsDto(long id, String name, List<PaymentDto> payments) {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -30,7 +29,7 @@ public class Company {
     private String name;
 
     @Transient
-    private List<Payment> payments;
+    private List<PaymentDto> payments;
 
     public CompanyDto toDto() {
         return new CompanyDto(this.id, this.name);
@@ -39,4 +38,5 @@ public class Company {
     public CompanyWithPaymentsDto toPaymentsDto() {
         return new CompanyWithPaymentsDto(this.id, this.name, this.payments);
     }
+
 }

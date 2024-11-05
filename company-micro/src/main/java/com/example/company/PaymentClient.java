@@ -15,7 +15,7 @@ public class PaymentClient {
     private String baseUrl;
 
     @WithSpan
-    public List<Company.Payment> getPayments(long companyId) {
+    public List<Company.PaymentDto> getPayments(long companyId) {
         final String uri = "/payments/%d".formatted(companyId);
 
         Span span = Span.current();
@@ -25,7 +25,7 @@ public class PaymentClient {
                 .get()
                 .uri(uri)
                 .retrieve()
-                .bodyToFlux(Company.Payment.class)
+                .bodyToFlux(Company.PaymentDto.class)
                 .collectList()
                 .block();
     }

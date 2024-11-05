@@ -4,13 +4,15 @@ import { revalidatePath } from "next/cache";
 export default function AddPayment({companyId}: { companyId: number }) {
 
   async function addPayment(formData: FormData) {
-    "use server"
+    "use server";
+
+    if (!process.env.PAYMENT_URL) return;
 
     const data = {
       amount: formData.get("amount")
     };
 
-    const res = await fetch(`http://payment.localhost/payments/${companyId}`, {
+    const res = await fetch(`${process.env.PAYMENT_URL}/payments/${companyId}`, {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {

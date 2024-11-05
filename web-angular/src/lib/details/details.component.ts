@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForOf, NgIf } from "@angular/common";
 import { Company } from "../types";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AddPaymentComponent } from "../add-payment/add-payment.component";
 
 @Component({
@@ -11,6 +11,7 @@ import { AddPaymentComponent } from "../add-payment/add-payment.component";
     NgForOf,
     AddPaymentComponent,
     NgIf,
+    RouterLink,
   ],
   styleUrl: "./details.component.css"
 })

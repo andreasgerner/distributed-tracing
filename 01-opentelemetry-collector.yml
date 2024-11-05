@@ -50,7 +50,8 @@ spec:
     accessControlAllowOriginList:
       - "http://localhost:3000"
       - "http://localhost:4200"
-      - "http://web.localhost"
+      - "http://web-angular.localhost"
+      - "http://web-next.localhost"
     accessControlAllowCredentials: true
     accessControlExposeHeaders:
       - "*"

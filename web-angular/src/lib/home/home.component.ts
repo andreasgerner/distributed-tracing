@@ -1,13 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForOf } from "@angular/common";
 import { Company } from "../types";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 
 @Component({
   standalone: true,
   templateUrl: "./home.component.html",
   imports: [
     NgForOf,
+    RouterLink,
   ],
   styleUrl: "./home.component.css"
 })

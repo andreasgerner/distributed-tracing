@@ -9,7 +9,7 @@
     <tr *ngFor="let company of companies">
         <td>{{ company.name }}</td>
         <td>
-            <a [href]="'/' + company.id">Details anzeigen</a>
+            <a [routerLink]="'/' + company.id">Details anzeigen</a>
         </td>
     </tr>
     </tbody>

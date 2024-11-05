@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class CompanyController {
 
-
     private final CompanyRepository companyRepository;
     private final PaymentClient paymentClient;
 
@@ -36,7 +35,7 @@ public class CompanyController {
         final Company company = companyRepository.findCompanyById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        final List<Company.Payment> payments = paymentClient.getPayments(company.getId());
+        final List<Company.PaymentDto> payments = paymentClient.getPayments(company.getId());
         company.setPayments(payments);
 
         return ResponseEntity.ok(company.toPaymentsDto());

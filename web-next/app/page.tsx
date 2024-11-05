@@ -5,7 +5,9 @@ import Link from "next/link";
 export const revalidate = 60;
 
 export default async function Home() {
-  const res = await fetch("http://company.localhost/companies");
+  if (!process.env.COMPANY_URL) return;
+
+  const res = await fetch(`${process.env.COMPANY_URL}/companies`);
   let companies: Company[] = await res.json();
 
   return (
