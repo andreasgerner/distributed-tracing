@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Payment {
 
-    public record PaymentDto(double amount) {}
+    public record PaymentDto(int amount) {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +20,7 @@ public class Payment {
     private Long companyId;
 
     @Column(name = "amount", nullable = false)
-    private Double amount;
+    private Integer amount;
 
     public PaymentDto toDto() {
         return new PaymentDto(amount);

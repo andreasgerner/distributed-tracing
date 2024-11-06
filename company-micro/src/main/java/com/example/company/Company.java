@@ -14,7 +14,7 @@ public class Company {
     public record CompanyDto(long id, String name) {
     }
 
-    public record PaymentDto(double amount) {
+    public record PaymentDto(int amount) {
     }
 
     public record CompanyWithPaymentsDto(long id, String name, List<PaymentDto> payments) {

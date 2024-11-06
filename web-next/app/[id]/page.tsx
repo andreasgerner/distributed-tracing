@@ -28,7 +28,7 @@ export default async function Details({params}: { params: Promise<{ id: string }
     <div>
       <p>Bisherige Beitragszahlungen:</p>
       {company.payments?.map((payment, idx) =>
-        <p key={idx}>{formatter.format(payment.amount)}</p>)}
+        <p key={idx}>{formatter.format(payment.amount / 100)}</p>)}
     </div>
     <AddPayment companyId={company.id}/>
   </div>

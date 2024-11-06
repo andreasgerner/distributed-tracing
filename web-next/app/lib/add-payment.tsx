@@ -8,8 +8,9 @@ export default function AddPayment({companyId}: { companyId: number }) {
 
     if (!process.env.PAYMENT_URL) return;
 
+    const trimmedAmount = Math.floor(Number(formData.get("amount")) * 100);
     const data = {
-      amount: formData.get("amount")
+      amount: trimmedAmount
     };
 
     const res = await fetch(`${process.env.PAYMENT_URL}/payments/${companyId}`, {

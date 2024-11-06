@@ -23,7 +23,12 @@ export class AddPaymentComponent {
   }
 
   addPayment() {
-    this.http.put(`http://payment.localhost/payments/${this.companyId}`, this.addPaymentForm.value).subscribe(async () => {
+    const trimmedAmount = Math.floor(this.addPaymentForm.value.amount * 100);
+    const data = {
+      amount: trimmedAmount
+    };
+
+    this.http.put(`http://payment.localhost/payments/${this.companyId}`, data).subscribe(async () => {
       await this.router.navigate([this.companyId], {onSameUrlNavigation: "reload"});
       this.addPaymentForm.reset();
     });

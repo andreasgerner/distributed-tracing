@@ -32,12 +32,10 @@ public class PaymentController {
     @PutMapping(value = "/payments/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addPayment(@PathVariable long id,
                                            @RequestBody Payment.PaymentDto body) throws URISyntaxException {
-        int temp = (int) (body.amount() * 100.0);
-        double trimmedAmount = ((double) temp) / 100.0;
 
         final Payment payment = new Payment();
         payment.setCompanyId(id);
-        payment.setAmount(trimmedAmount);
+        payment.setAmount(body.amount());
 
         paymentRepository.saveAndFlush(payment);
         return ResponseEntity.created(new URI("/payments/" + id)).build();
