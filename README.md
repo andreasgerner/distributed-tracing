@@ -107,6 +107,7 @@ kubectl apply -f 03-sample.yml
 Die Beispielanwendung besteht aus drei einzelnen Deployments:
 
 - Web-Oberfläche (Nginx + Angular CSR)
+- Web-Oberfläche (Nginx + NextJS ISR/SSR)
 - Microservice company (Spring)
 - Microservice payment (Spring)
 
@@ -129,7 +130,7 @@ docker run --name jaeger-deps --env STORAGE="elasticsearch" --env ES_NODES="http
 
 ### Instrumentalisierung der einzelnen Komponenten
 
-#### Web-Anwendung
+#### Web-Anwendung mit Angular
 
 Keine automatische Instrumentalisierung von Nginx oder Angular, stattdessen wurde OpenTelemetry vor dem Build der
 Anwendung händisch eingebunden.
@@ -139,6 +140,12 @@ von Nginx in die Meta-Tags der Anwendung gespeichert.
 
 Die Anwendung nutzt alle Instrumentalisierungen, die von `@opentelemetry/auto-instrumentations-web` bereitgestellt
 werden.
+
+#### Web-Anwendung mit NextJS
+
+Vollständige, automatische Instrumentalisierung der
+Anwendung. [Manuelle Einbindung der Dependencies](https://nextjs.org/docs/app/building-your-application/optimizing/open-telemetry)
+entfällt komplett, wird von Instrumentation übernommen.
 
 #### Microservice company
 
@@ -153,10 +160,22 @@ Reine Verwendung der automatischen Instrumentalisierung.
 
 Hier wurden keine OpenTelemetry-Dependencies eingebunden. Die Instrumentalisierung erfolgt vollständig beim Deployment.
 
+### Ergebnisse des Proof of Concept
+
+- Instrumentalisierung von Angular bzw. CSR-Apps im Allgemeinen gestaltet sich als kompliziert. Zum einen keine
+  automatische Instrumentalisierung möglich, zum anderen müssen die Traces vom Client aus an eine öffentliche
+  OpenTelemetry-Schnittstelle gesendet werden.
+- Wenig Mehrwert bei der Nutzung von Traefik. Liefert zwar Traces zu den einzelnen Ingress-Routen, kann diese aber nicht
+  verbinden, falls Anwendung selbst Trace-Header nicht weiterreicht. Ist die Anwendung so weit instrumentalisiert, dass
+  sie Header annimmt und weitergibt, ist der zusätzliche Ingress-Trace redundant.
+
 ## 🐧 Änderungen zur Verwendung in einem OpenShift-Cluster
 
 OpenShift stellt einen eigenen, angepassten Build des OpenTelemetry Operators bereit. Dieser kann
 anhand [dieser Anleitung](https://docs.openshift.com/container-platform/4.12/observability/otel/otel-installing.html)
 verfügbar gemacht werden.
-
 Dadurch entfällt außerdem die Installation von Cert-Manager, da dieser Build die Zertifikate selbst bereitstellt.
+
+Nachdem Traefik keinen Mehrwert bietet, wird auf die Installation davon ebenfalls verzichtet.
+
+Der vollständige Guide zur Installation im OpenShift-Cluster liegt [hier](oc/installation-oc.md).
