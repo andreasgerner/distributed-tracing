@@ -11,6 +11,10 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+          cors:
+            allowed_origins:
+              - http://localhost:4200
+              - http://web-angular.localhost
     
     processors:
       batch:
@@ -18,8 +22,6 @@ spec:
         timeout: 10s
     
     exporters:
-      debug:
-        verbosity: detailed
       otlp/jaeger:
         endpoint: "http://jaeger-collector.jaeger.svc.cluster.local:4317"
         tls:
@@ -32,36 +34,10 @@ spec:
           processors: [batch]
           exporters: [otlp/jaeger]
 ---
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: cors
-spec:
-  headers:
-    accessControlAllowMethods:
-      - "GET"
-      - "HEAD"
-      - "OPTIONS"
-      - "POST"
-      - "PUT"
-    accessControlAllowHeaders:
-      - "content-type"
-      - "*"
-    accessControlAllowOriginList:
-      - "http://localhost:3000"
-      - "http://localhost:4200"
-      - "http://web-angular.localhost"
-      - "http://web-next.localhost"
-    accessControlAllowCredentials: true
-    accessControlExposeHeaders:
-      - "*"
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: opentelemetry-collector
-  annotations:
-    "traefik.ingress.kubernetes.io/router.middlewares": "otel-cors@kubernetescrd"
 spec:
   rules:
     - host: otel.localhost
