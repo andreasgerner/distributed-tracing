@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-add-payment",
@@ -28,7 +29,7 @@ export class AddPaymentComponent {
       amount: trimmedAmount
     };
 
-    this.http.put(`http://payment.localhost/payments/${this.companyId}`, data).subscribe(async () => {
+    this.http.put(`${environment.paymentUrl}/payments/${this.companyId}`, data).subscribe(async () => {
       await this.router.navigate([this.companyId], {onSameUrlNavigation: "reload"});
       this.addPaymentForm.reset();
     });

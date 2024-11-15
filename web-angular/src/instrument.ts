@@ -7,15 +7,16 @@ import { getWebAutoInstrumentations } from "@opentelemetry/auto-instrumentations
 import { Resource } from "@opentelemetry/resources";
 import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 import { MetaTagTraceContextPropagator } from "./meta-trace-extractor";
+import { environment } from "./environments/environment";
 
 const provider = new WebTracerProvider({
   resource: new Resource({
-    [ATTR_SERVICE_NAME]: "web-angular"
+    [ATTR_SERVICE_NAME]: environment.serviceName
   })
 });
 
 provider.addSpanProcessor(new BatchSpanProcessor(new OTLPTraceExporter({
-  url: "http://otel.localhost/v1/traces",
+  url: environment.otelTraceUrl,
 })));
 
 provider.register({
@@ -27,7 +28,7 @@ registerInstrumentations({
   instrumentations: [
     getWebAutoInstrumentations({
       "@opentelemetry/instrumentation-xml-http-request": {
-        propagateTraceHeaderCorsUrls: [new RegExp("company.localhost"), new RegExp("payment.localhost")]
+        propagateTraceHeaderCorsUrls: environment.propagateUrls
       }
     })],
 });
