@@ -1,0 +1,25 @@
+master:
+  masterOnly: false
+  replicaCount: 1
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    privileged: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 250m
+      memory: 768Mi
+data:
+  replicaCount: 0
+coordinating:
+  replicaCount: 0
+ingest:
+  replicaCount: 0
+security:
+  elasticPassword: j43g3r2024
+sysctlImage:
+  enabled: false

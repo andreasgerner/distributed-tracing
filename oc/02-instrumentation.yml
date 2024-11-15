@@ -1,0 +1,30 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: sample-instrumentation
+spec:
+  env:
+    - name: OTEL_METRICS_EXPORTER
+      value: none
+    - name: OTEL_LOGS_EXPORTER
+      value: none
+  exporter:
+    # grpc endpoint
+    endpoint: http://opentelemetry-collector:4317
+  propagators:
+    - tracecontext
+    - baggage
+    - b3
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1"
+  resource:
+    addK8sUIDAttributes: true
+  java:
+    image: artifactory:5000/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
+    env:
+      # java uses http exporter by default, so change endpoint to http
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://opentelemetry-collector:4318
+  nodejs:
+    image: artifactory:5000/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
