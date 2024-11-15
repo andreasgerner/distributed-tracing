@@ -6,7 +6,7 @@ storage:
     host: elasticsearch.elastic.svc.cluster.local
     port: 9200
     scheme: http
-    user: jaeger
+    user: elastic
     password: j43g3r2024
 query:
   ingress:

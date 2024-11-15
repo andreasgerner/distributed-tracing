@@ -7,3 +7,5 @@ coordinating:
   replicaCount: 0
 ingest:
   replicaCount: 0
+security:
+  elasticPassword: j43g3r2024

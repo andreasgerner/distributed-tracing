@@ -179,3 +179,15 @@ Dadurch entfällt außerdem die Installation von Cert-Manager, da dieser Build d
 Nachdem Traefik keinen Mehrwert bietet, wird auf die Installation davon ebenfalls verzichtet.
 
 Der vollständige Guide zur Installation im OpenShift-Cluster liegt [hier](oc/installation-oc.md).
+
+## Images
+
+| Komponente  | Lokales Cluster                                                  | OpenShift Cluster                                                         |
+|-------------|------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Company     | ghcr.io/andreasgerner/distributed-tracing/sample-company:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-company:latest  |
+| Payment     | ghcr.io/andreasgerner/distributed-tracing/sample-payment:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-payment:latest  |
+| Web Next    | ghcr.io/andreasgerner/distributed-tracing/sample-web-next:latest | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:latest |
+| Web Angular | ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:k8s | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:oc     |
+
+**Artifactory fungiert als Mirror von ghcr, Images sind die selben!**
+
