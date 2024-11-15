@@ -1,6 +1,6 @@
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY dist/web-angular/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+ENV PORT=8080

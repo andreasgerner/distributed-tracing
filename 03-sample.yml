@@ -139,7 +139,7 @@ spec:
           image: ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -151,7 +151,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 80
+      targetPort: 8080
   selector:
     app: web-angular
 ---
