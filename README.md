@@ -187,7 +187,7 @@ Der vollständige Guide zur Installation im OpenShift-Cluster liegt [hier](oc/in
 | Company     | ghcr.io/andreasgerner/distributed-tracing/sample-company:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-company:latest  |
 | Payment     | ghcr.io/andreasgerner/distributed-tracing/sample-payment:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-payment:latest  |
 | Web Next    | ghcr.io/andreasgerner/distributed-tracing/sample-web-next:latest | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:latest |
-| Web Angular | ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:k8s | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:oc     |
+| Web Angular | ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:k8s | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:openshift     |
 
 **Artifactory fungiert als Mirror von ghcr, Images sind die selben!**
 

@@ -1,0 +1,34 @@
+repository: "artifactory:5000"
+pullPolicy: "Always"
+defaultTag: "latest"
+
+company:
+  resources:
+    requests:
+      memory: '128Mi'
+    limits:
+      memory: '512Mi'
+  databaseUrl: ""
+
+payment:
+  resources:
+    requests:
+      memory: '128Mi'
+    limits:
+      memory: '512Mi'
+  databaseUrl: ""
+
+angular:
+  imageTag: ""
+  resources:
+    requests:
+      memory: '128Mi'
+    limits:
+      memory: '512Mi'
+
+next:
+  resources:
+    requests:
+      memory: '128Mi'
+    limits:
+      memory: '512Mi'

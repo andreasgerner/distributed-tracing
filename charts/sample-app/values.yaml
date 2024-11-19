@@ -1,0 +1,27 @@
+nameOverride: ""
+fullnameOverride: ""
+
+repository: "ghcr.io"
+pullPolicy: "IfNotPresent"
+defaultTag: "latest"
+
+ingressClassName: ""
+
+company:
+  imageTag: ""
+  resources: {}
+  databaseUrl: "jdbc:sqlserver://host.docker.internal:10001;encrypt=true;trustServerCertificate=true;username=sa;password=yourStrongPassword1!;"
+  port: 8080
+
+payment:
+  imageTag: ""
+  resources: {}
+  databaseUrl: ""
+
+angular:
+  imageTag: ""
+  resources: {}
+
+next:
+  imageTag: ""
+  resources: {}

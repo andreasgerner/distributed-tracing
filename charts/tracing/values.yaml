@@ -1,0 +1,69 @@
+nameOverride: ""
+fullnameOverride: ""
+
+elasticsearch:
+  master:
+    masterOnly: false
+    replicaCount: 1
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      privileged: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 250m
+        memory: 768Mi
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    replicaCount: 0
+  security:
+    elasticPassword: j43g3r2024
+  sysctlImage:
+    enabled: false
+
+jaeger:
+  global:
+    imageRegistry: artifactory:5000
+
+  provisionDataStore:
+    cassandra: false
+
+  storage:
+    type: elasticsearch
+    elasticsearch:
+      host: tracing-oc-elasticsearch
+      port: 9200
+      scheme: http
+      user: elastic
+      password: j43g3r2024
+
+  query:
+    service:
+      targetPort: 16686
+    ingress:
+      enabled: true
+      ingressClassName: openshift-default
+      tls:
+        - hosts:
+            - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net
+          secretName: nv-default-cert
+      hosts:
+        - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net
+
+  collector:
+    service:
+      otlp:
+        grpc:
+          name: otlp-grpc
+          port: 4317
+        http:
+          name: otlp-http
+          port: 4138
+

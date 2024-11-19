@@ -1,0 +1,9 @@
+dependencies:
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 21.3.25
+- name: jaeger
+  repository: https://jaegertracing.github.io/helm-charts
+  version: 3.3.2
+digest: sha256:c9dcc2085cfc413bf59de6842bf8eb215f53dbfb3875c4c5b72c428ffca6bcad
+generated: "2024-11-18T15:22:45.2731614+01:00"
