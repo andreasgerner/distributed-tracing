@@ -1,7 +1,7 @@
 import { Company } from "@/types";
 import styles from "./page.module.css";
 import Link from "next/link";
-import AddPayment from "@/app/lib/add-payment";
+import AddPayment from "@/lib/add-payment";
 
 export default async function Details({params}: { params: Promise<{ id: string }> }) {
   if (!process.env.COMPANY_URL) return;
