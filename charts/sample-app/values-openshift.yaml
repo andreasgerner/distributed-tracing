@@ -11,7 +11,7 @@ company:
   ingress:
     tls:
       enabled: true
-      secretName: nv-default-cert
+      secretName: "nv-default-cert"
     host: "tracing-company.apps.ocp-test.cloud.nuernberger.net"
 
 payment:
@@ -24,7 +24,7 @@ payment:
   ingress:
     tls:
       enabled: true
-      secretName: nv-default-cert
+      secretName: "nv-default-cert"
     host: "tracing-payment.apps.ocp-test.cloud.nuernberger.net"
 
 angular:
@@ -32,13 +32,13 @@ angular:
   ingress:
     tls:
       enabled: true
-      secretName: nv-default-cert
+      secretName: "nv-default-cert"
     host: "tracing-web-angular.apps.ocp-test.cloud.nuernberger.net"
 
 next:
   ingress:
     tls:
       enabled: true
-      secretName: nv-default-cert
+      secretName: "nv-default-cert"
     host: "tracing-web-next.apps.ocp-test.cloud.nuernberger.net"
 

@@ -9,4 +9,4 @@ jaeger:
     ingress:
       enabled: true
       hosts:
-        - jaeger.localhost
+        - "jaeger.localhost"
