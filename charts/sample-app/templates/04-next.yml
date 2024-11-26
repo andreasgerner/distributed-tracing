@@ -1,65 +1,80 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-next-deployment
+  name: {{ include "sample-app.fullname" . }}-next
   labels:
-    app: web-next
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: next
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-next
+      {{- include "sample-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: next
   template:
     metadata:
       labels:
-        app: web-next
+        {{- include "sample-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: next
       annotations:
-        "resource.opentelemetry.io/service.name": "web-next"
         "instrumentation.opentelemetry.io/inject-nodejs": "true"
     spec:
       containers:
-        - name: web-next
-          image: artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:latest
-          imagePullPolicy: Always
+        - name: next
+          image: "{{ .Values.imageRegistry }}/andreasgerner/distributed-tracing/sample-web-next:{{ .Values.next.imageTag | default .Values.defaultTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
             - name: COMPANY_URL
-              value: "http://company-service:8080"
+              value: "http://{{ include "sample-app.fullname" . }}-company:80"
             - name: PAYMENT_URL
-              value: "http://payment-service:8080"
+              value: "http://{{ include "sample-app.fullname" . }}-payment:80"
           ports:
             - containerPort: 3000
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: http
+          resources:
+            {{- toYaml .Values.next.resources | nindent 12 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-next-service
+  name: {{ include "sample-app.fullname" . }}-next
   labels:
-    app: web-next
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: next
 spec:
   ports:
-    - name: http
-      port: 80
-      targetPort: 3000
+    - port: 80
+      name: http
+      targetPort: http
   selector:
-    app: web-next
+    {{- include "sample-app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: next
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-next-ingress
+  name: {{ include "sample-app.fullname" . }}-next
+  labels:
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: next
 spec:
-  ingressClassName: openshift-default
+  {{- if .Values.next.ingress.tls.enabled }}
   tls:
     - hosts:
-        - tracing-web-next.apps.ocp-test.cloud.nuernberger.net
-      secretName: nv-default-cert
+        - {{ .Values.next.ingress.host }}
+      secretName: {{ .Values.next.ingress.tls.secretName }}
+  {{- end }}
   rules:
-    - host: tracing-web-next.apps.ocp-test.cloud.nuernberger.net
+    - host: {{ .Values.next.ingress.host }}
       http:
         paths:
           - backend:
               service:
-                name: web-next-service
+                name: {{ include "sample-app.fullname" . }}-next
                 port:
                   name: http
             pathType: ImplementationSpecific

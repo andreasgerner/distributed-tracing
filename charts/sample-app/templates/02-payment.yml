@@ -1,68 +1,87 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-deployment
+  name: {{ include "sample-app.fullname" . }}-payment
   labels:
-    app: payment
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: payment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: payment
+      {{- include "sample-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: payment
   template:
     metadata:
       labels:
-        app: payment
+        {{- include "sample-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: payment
       annotations:
-        "resource.opentelemetry.io/service.name": "payment-service"
         "instrumentation.opentelemetry.io/inject-java": "true"
     spec:
       containers:
         - name: payment
-          image: artifactory:5000/andreasgerner/distributed-tracing/sample-payment:latest
-          imagePullPolicy: Always
+          image: "{{ .Values.imageRegistry }}/andreasgerner/distributed-tracing/sample-payment:{{ .Values.payment.imageTag | default .Values.defaultTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
+            {{- if .Values.payment.databaseUrl }}
+            - name: DB_URL
+              value: "{{ .Values.payment.databaseUrl }}"
+            {{- else }}
             - name: SPRING_PROFILES_ACTIVE
-              value: h2
+              value: "h2"
+            {{- end }}
           ports:
             - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
           resources:
-            requests:
-              memory: '128Mi'
-            limits:
-              memory: '512Mi'
+            {{- toYaml .Values.payment.resources | nindent 12 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: payment-service
+  name: {{ include "sample-app.fullname" . }}-payment
   labels:
-    app: payment
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: payment
 spec:
   ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
+    - port: 80
+      name: http
+      targetPort: http
   selector:
-    app: payment
+    {{- include "sample-app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: payment
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: payment-ingress
+  name: {{ include "sample-app.fullname" . }}-payment
+  labels:
+    {{- include "sample-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: payment
 spec:
-  ingressClassName: openshift-default
+  {{- if .Values.payment.ingress.tls.enabled }}
   tls:
     - hosts:
-        - tracing-payment.apps.ocp-test.cloud.nuernberger.net
-      secretName: nv-default-cert
+        - {{ .Values.payment.ingress.host }}
+      secretName: {{ .Values.payment.ingress.tls.secretName }}
+  {{- end }}
   rules:
-    - host: tracing-payment.apps.ocp-test.cloud.nuernberger.net
+    - host: {{ .Values.payment.ingress.host }}
       http:
         paths:
           - backend:
               service:
-                name: payment-service
+                name: {{ include "sample-app.fullname" . }}-payment
                 port:
                   name: http
             pathType: ImplementationSpecific

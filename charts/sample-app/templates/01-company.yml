@@ -4,29 +4,28 @@ metadata:
   name: {{ include "sample-app.fullname" . }}-company
   labels:
     {{- include "sample-app.labels" . | nindent 4 }}
-    app: company
+    app.kubernetes.io/component: company
 spec:
   replicas: 1
   selector:
     matchLabels:
       {{- include "sample-app.selectorLabels" . | nindent 6 }}
-      app: company
+      app.kubernetes.io/component: company
   template:
     metadata:
       labels:
         {{- include "sample-app.labels" . | nindent 8 }}
-        app: company
+        app.kubernetes.io/component: company
       annotations:
-        "resource.opentelemetry.io/service.name": "company-service"
         "instrumentation.opentelemetry.io/inject-java": "true"
     spec:
       containers:
         - name: company
-          image: "{{ .Values.repository }}/andreasgerner/distributed-tracing/sample-company:{{ .Values.company.imageTag | default .Values.defaultTag }}"
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.imageRegistry }}/andreasgerner/distributed-tracing/sample-company:{{ .Values.company.imageTag | default .Values.defaultTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
             - name: PAYMENT_URL
-              value: "http://payment-service:8080"
+              value: "http://{{ include "sample-app.fullname" . }}-payment:80"
             {{- if .Values.company.databaseUrl }}
             - name: DB_URL
               value: "{{ .Values.company.databaseUrl }}"
@@ -37,6 +36,14 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
           resources:
             {{- toYaml .Values.company.resources | nindent 12 }}
 ---
@@ -46,15 +53,15 @@ metadata:
   name: {{ include "sample-app.fullname" . }}-company
   labels:
     {{- include "sample-app.labels" . | nindent 4 }}
-    app: company
+    app.kubernetes.io/component: company
 spec:
   ports:
-    - port: {{ .Values.company.port }}
+    - port: 80
       name: http
       targetPort: http
   selector:
     {{- include "sample-app.selectorLabels" . | nindent 4 }}
-    app: company
+    app.kubernetes.io/component: company
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -62,20 +69,21 @@ metadata:
   name: {{ include "sample-app.fullname" . }}-company
   labels:
     {{- include "sample-app.labels" . | nindent 4 }}
-    app: company
+    app.kubernetes.io/component: company
 spec:
-  ingressClassName: openshift-default
+  {{- if .Values.company.ingress.tls.enabled }}
   tls:
     - hosts:
-        - tracing-company.apps.ocp-test.cloud.nuernberger.net
-      secretName: nv-default-cert
+        - {{ .Values.company.ingress.host }}
+      secretName: {{ .Values.company.ingress.tls.secretName }}
+  {{- end }}
   rules:
-    - host: tracing-company.apps.ocp-test.cloud.nuernberger.net
+    - host: {{ .Values.company.ingress.host }}
       http:
         paths:
           - backend:
               service:
-                name: company-service
+                name: {{ include "sample-app.fullname" . }}-company
                 port:
                   name: http
             pathType: ImplementationSpecific

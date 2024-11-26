@@ -1,34 +1,44 @@
-repository: "artifactory:5000"
-pullPolicy: "Always"
-defaultTag: "latest"
+imageRegistry: "artifactory:5000"
+imagePullPolicy: "Always"
 
 company:
+  databaseUrl: ""
   resources:
     requests:
-      memory: '128Mi'
+      memory: "128Mi"
     limits:
-      memory: '512Mi'
-  databaseUrl: ""
+      memory: "512Mi"
+  ingress:
+    tls:
+      enabled: true
+      secretName: nv-default-cert
+    host: "tracing-company.apps.ocp-test.cloud.nuernberger.net"
 
 payment:
+  databaseUrl: ""
   resources:
     requests:
-      memory: '128Mi'
+      memory: "128Mi"
     limits:
-      memory: '512Mi'
-  databaseUrl: ""
+      memory: "512Mi"
+  ingress:
+    tls:
+      enabled: true
+      secretName: nv-default-cert
+    host: "tracing-payment.apps.ocp-test.cloud.nuernberger.net"
 
 angular:
-  imageTag: ""
-  resources:
-    requests:
-      memory: '128Mi'
-    limits:
-      memory: '512Mi'
+  imageTag: "openshift"
+  ingress:
+    tls:
+      enabled: true
+      secretName: nv-default-cert
+    host: "tracing-web-angular.apps.ocp-test.cloud.nuernberger.net"
 
 next:
-  resources:
-    requests:
-      memory: '128Mi'
-    limits:
-      memory: '512Mi'
+  ingress:
+    tls:
+      enabled: true
+      secretName: nv-default-cert
+    host: "tracing-web-next.apps.ocp-test.cloud.nuernberger.net"
+

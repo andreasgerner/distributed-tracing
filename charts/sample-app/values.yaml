@@ -1,27 +1,44 @@
-nameOverride: ""
-fullnameOverride: ""
-
-repository: "ghcr.io"
-pullPolicy: "IfNotPresent"
+imageRegistry:
+imagePullPolicy: "IfNotPresent"
 defaultTag: "latest"
 
-ingressClassName: ""
+nameOverride: ""
+fullnameOverride: "sample-app"
 
 company:
   imageTag: ""
   resources: {}
-  databaseUrl: "jdbc:sqlserver://host.docker.internal:10001;encrypt=true;trustServerCertificate=true;username=sa;password=yourStrongPassword1!;"
-  port: 8080
+  databaseUrl: ""
+  ingress:
+    tls:
+      enabled: false
+      secretName: ""
+    host: ""
 
 payment:
   imageTag: ""
   resources: {}
   databaseUrl: ""
+  ingress:
+    tls:
+      enabled: false
+      secretName: ""
+    host: ""
 
 angular:
-  imageTag: ""
+  imageTag: "k8s"
   resources: {}
+  ingress:
+    tls:
+      enabled: false
+      secretName: ""
+    host: ""
 
 next:
   imageTag: ""
   resources: {}
+  ingress:
+    tls:
+      enabled: false
+      secretName: ""
+    host: ""

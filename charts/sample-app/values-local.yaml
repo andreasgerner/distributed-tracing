@@ -1,0 +1,20 @@
+imageRegistry: "ghcr.io"
+
+company:
+  databaseUrl: "jdbc:sqlserver://host.docker.internal:10001;encrypt=true;trustServerCertificate=true;username=sa;password=yourStrongPassword1!;"
+  ingress:
+    host: "company.localhost"
+
+payment:
+  databaseUrl: "jdbc:sqlserver://host.docker.internal:10002;encrypt=true;trustServerCertificate=true;username=sa;password=yourStrongPassword1!;"
+  ingress:
+    host: "payment.localhost"
+
+angular:
+  imageTag: "local"
+  ingress:
+    host: "angular.localhost"
+
+next:
+  ingress:
+    host: "next.localhost"
