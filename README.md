@@ -20,21 +20,20 @@ NÜRNBERGER Versicherung entsteht.
 
 ### Implementierung:
 
-> 🛑 Traefik wurde nach einer ersten Testphase wieder aus der Anwendung entfernt (siehe ältere Commits), da kein Mehrwert
-> von dessen Nutzung festgestellt werden konnte.
+🛑 Traefik wurde nach einer ersten Testphase wieder aus der Anwendung entfernt (siehe ältere Commits), da kein Mehrwert
+von dessen Nutzung festgestellt werden konnte.
 
-### 1. Operatoren
+#### 1. Operatoren
 
 Im Gegensatz zum zukünftigen OpenShift-Cluster müssen der OpenTelemetry-Operator und ein Ingress-Router (ingress-nginx)
 im lokalen Cluster selbst installiert werden.
-Dafür werden clusterweite Berechtigungen zur Installation von CRDs und Operator, etwa die *cluster-admin*-Rolle,
-benötigt!
+Dafür werden Berechtigungen zur Installation von CRDs und Operator, etwa die *cluster-admin*-Rolle, benötigt!
 
 ```shell
 helm install operators charts/operators
 ```
 
-### 2. Tracing-Anwendungen
+#### 2. Tracing-Anwendungen
 
 Der folgende Helm-Chart stellt alle Management-Anwendungen bereit. Dazu gehört:
 
@@ -48,7 +47,7 @@ Der folgende Helm-Chart stellt alle Management-Anwendungen bereit. Dazu gehört:
 helm install tracing charts/tracing -f charts/tracing/values-local.yaml
 ```
 
-### 3. Test-Anwendung
+#### 3. Test-Anwendung
 
 Zu Demonstrationszwecken wurde eine Testanwendung mit Angular-/NextJS-Weboberfläche und zwei Java-Microservices als
 Backend entwickelt.
@@ -70,7 +69,7 @@ helm install sample-app charts/sample-app -f charts/sample-app/values-local.yaml
 
 ### Darauf resultierende Architektur:
 
-![Diagramm der lokalen Architektur](docs/local-architecture.drawio.svg)
+![Diagramm der lokalen Architektur](assets/local-architecture.drawio.svg)
 
 ## 🎪 Aufbau der Beispielanwendung
 
@@ -81,7 +80,7 @@ Die Beispielanwendung besteht aus drei einzelnen Deployments:
 - Microservice company (Spring)
 - Microservice payment (Spring)
 
-Jaeger kann nach einigen erzeugten Traces automatisch einen Graph über die Systemarchitektur erstellen.
+Jaeger kann nach einigen erzeugten Traces automatisch einem Graph über die Systemarchitektur erstellen.
 Dafür muss folgender Container ausgeführt werden (einmalig, beendet sich nach Berechnung selbst):
 
 ```shell
@@ -96,7 +95,7 @@ docker run --name jaeger-deps --env STORAGE="elasticsearch" --env ES_NODES="http
 
 ### Schaubild über Zusammenspiel der Komponenten
 
-![Diagramm der Anwendung](docs/sample-app.drawio.svg)
+![Diagramm der Anwendung](assets/sample-app.drawio.svg)
 
 ### Instrumentalisierung der einzelnen Komponenten
 
@@ -165,7 +164,11 @@ Wird keine Datenbank-URL angegeben, verwendet der entsprechende Service eine In-
 helm install sample-app charts/sample-app -f charts/sample-app/values-openshift.yaml
 ```
 
-## Images
+### Darauf resultierende Architektur:
+
+![Diagramm der OpenShift-Architektur](assets/openshift-architecture.drawio.svg)
+
+## 💾 Images
 
 | Komponente  | Lokales Cluster                                                  | OpenShift Cluster                                                            |
 |-------------|------------------------------------------------------------------|------------------------------------------------------------------------------|
