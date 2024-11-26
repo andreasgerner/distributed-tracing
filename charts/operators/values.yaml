@@ -1,0 +1,15 @@
+opentelemetry-operator:
+  fullnameOverride: opentelemetry-operator
+  manager:
+    collectorImage:
+      repository: "otel/opentelemetry-collector-k8s"
+  admissionWebhooks:
+    certManager:
+      enabled: false
+    autoGenerateCert:
+      enabled: true
+
+ingress-nginx:
+  controller:
+    ingressClassResource:
+      default: true

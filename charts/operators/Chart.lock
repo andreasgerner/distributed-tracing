@@ -1,0 +1,9 @@
+dependencies:
+- name: opentelemetry-operator
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.74.3
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.11.3
+digest: sha256:02d23b6ac9da8b03168aafa14cfa56e3c785d47c0c901c2208dc13161bea4964
+generated: "2024-11-25T15:12:28.8177367+01:00"
