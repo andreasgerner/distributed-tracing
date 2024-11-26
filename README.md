@@ -17,72 +17,42 @@ NÜRNBERGER Versicherung entsteht.
 
 - lokales kubernetes-Cluster (ich verwende Docker Desktop)
 - kubectl und helm installiert
-- clusterweite Berechtigungen zur Installation von CRDs und Operator, etwa *cluster-admin*-Rolle
 
 ### Implementierung:
 
-#### 1. Traefik
+> 🛑 Traefik wurde nach einer ersten Testphase wieder aus der Anwendung entfernt (siehe ältere Commits), da kein Mehrwert
+> von dessen Nutzung festgestellt werden konnte.
 
-Traefik erstellt Tracing-Daten zu angelegten Ingress-Routen und exportiert diese an OpenTelemetry.
+### 1. Operatoren
 
-```shell
-helm install traefik traefik --repo https://traefik.github.io/charts  -n traefik --create-namespace -f values-traefik.yml
-```
-
-#### 2. Certmanager
-
-Certmanager erstellt und verwaltet TLS-Zertifikate für Workloads im Cluster. Wird vom Opentelemetry Operator benötigt.
+Im Gegensatz zum zukünftigen OpenShift-Cluster müssen der OpenTelemetry-Operator und ein Ingress-Router (ingress-nginx)
+im lokalen Cluster selbst installiert werden.
+Dafür werden clusterweite Berechtigungen zur Installation von CRDs und Operator, etwa die *cluster-admin*-Rolle,
+benötigt!
 
 ```shell
-helm install cert-manager cert-manager --repo https://charts.jetstack.io -n cert-manager --create-namespace --set "crds.enabled=true"
+helm install operators charts/operators
 ```
 
-#### 3. OpenTelemetry
+### 2. Tracing-Anwendungen
 
-Der Operator von OpenTelemetry erstellt und verwaltet Ressourcen bezüglich OpenTelemetry, die über CRDs angelegt werden
-können.
+Der folgende Helm-Chart stellt alle Management-Anwendungen bereit. Dazu gehört:
+
+- eine Network-Policy, die erforderlichen Traffic im Cluster erlaubt
+- ein OpenTelemetry Collector
+- ein CORS-kompatibles Proxy für den Collector
+- eine OpenTelemetry Auto-Instrumentation
+- eine Jaeger-Instanz
 
 ```shell
-helm install opentelemetry-operator opentelemetry-operator --repo https://open-telemetry.github.io/opentelemetry-helm-charts  -n otel --create-namespace --set "manager.collectorImage.repository=otel/opentelemetry-collector-k8s"
+helm install tracing charts/tracing -f charts/tracing/values-local.yaml
 ```
 
-#### 4. Collector für OpenTelemetry-Daten
+### 3. Test-Anwendung
 
-Der Collector sammelt OpenTelemetry-Informationen aller Services ein, verarbeitet und exportiert diese.
-
-```shell
-kubectl apply -f 01-opentelemetry-collector.yml -n otel
-```
-
-#### 5. ElasticSearch
-
-Eine ElasticSearch-Instanz speichert die Daten, die vom Collector exportiert und von Jaeger visualisiert werden.
-
-```shell
-helm install elasticsearch elasticsearch --repo https://charts.bitnami.com/bitnami -n elastic --create-namespace -f values-elasticsearch.yml
-```
-
-#### 6. Jaeger
-
-Mithilfe von Jaeger können Traces aus den OpenTelemetry-Daten visualisiert und nachverfolgt werden.
-
-```shell
-helm install jaeger jaeger --repo https://jaegertracing.github.io/helm-charts  -n jaeger --create-namespace -f values-jaeger.yml
-```
-
-#### 7. Instrumentation
-
-Der Operator von OpenTelemetry stellt über Instrumentalisierungen Möglichkeiten bereit, bestimmte Deployments
-automatisch hinsichtlich OpenTelemetry-Metriken und -Traces zu instrumentalisieren.
-
-```shell
-kubectl apply -f 02-instrumentation.yml
-```
-
-### 8. Test-Anwendung
-
-Eine Testanwendung mit Angular-Weboberfläche und zwei Java-Microservices als Backend repräsentiert, wie Tracing-Daten in
-der Praxis aussehen und verwendet werden können.
+Zu Demonstrationszwecken wurde eine Testanwendung mit Angular-/NextJS-Weboberfläche und zwei Java-Microservices als
+Backend entwickelt.
+Der folgende Helm-Chart stellt diese bereit.
 
 > ❗ **Achtung**
 >
@@ -95,7 +65,7 @@ der Praxis aussehen und verwendet werden können.
 > ```
 
 ```shell
-kubectl apply -f 03-sample.yml
+helm install sample-app charts/sample-app -f charts/sample-app/values-local.yaml
 ```
 
 ### Darauf resultierende Architektur:
@@ -178,16 +148,31 @@ Dadurch entfällt außerdem die Installation von Cert-Manager, da dieser Build d
 
 Nachdem Traefik keinen Mehrwert bietet, wird auf die Installation davon ebenfalls verzichtet.
 
-Der vollständige Guide zur Installation im OpenShift-Cluster liegt [hier](oc/installation-oc.md).
+### Installation
+
+```shell
+helm install tracing charts/tracing -f charts/tracing/values-openshift.yaml
+```
+
+Zur Verwendung einer richtigen Datenbank kann unter [values-openshift](charts/sample-app/values-openshift.yaml) für den
+Company- und Payment-Service eine richtige, JDBC-kompatible Connection-URL angegeben werden.
+Die Verwaltung von Credentials mittels Secrets wurde nicht weiter implementiert, da dies außerhalb des Scopes dieser
+Arbeit liegt.
+
+Wird keine Datenbank-URL angegeben, verwendet der entsprechende Service eine In-Memory-Datenbank (H2).
+
+```shell
+helm install sample-app charts/sample-app -f charts/sample-app/values-openshift.yaml
+```
 
 ## Images
 
-| Komponente  | Lokales Cluster                                                  | OpenShift Cluster                                                         |
-|-------------|------------------------------------------------------------------|---------------------------------------------------------------------------|
-| Company     | ghcr.io/andreasgerner/distributed-tracing/sample-company:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-company:latest  |
-| Payment     | ghcr.io/andreasgerner/distributed-tracing/sample-payment:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-payment:latest  |
-| Web Next    | ghcr.io/andreasgerner/distributed-tracing/sample-web-next:latest | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:latest |
-| Web Angular | ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:k8s | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:openshift     |
+| Komponente  | Lokales Cluster                                                  | OpenShift Cluster                                                            |
+|-------------|------------------------------------------------------------------|------------------------------------------------------------------------------|
+| Company     | ghcr.io/andreasgerner/distributed-tracing/sample-company:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-company:latest     |
+| Payment     | ghcr.io/andreasgerner/distributed-tracing/sample-payment:latest  | artifactory:5000/andreasgerner/distributed-tracing/sample-payment:latest     |
+| Web Next    | ghcr.io/andreasgerner/distributed-tracing/sample-web-next:latest | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:latest    |
+| Web Angular | ghcr.io/andreasgerner/distributed-tracing/sample-web-angular:k8s | artifactory:5000/andreasgerner/distributed-tracing/sample-web-next:openshift |
 
 **Artifactory fungiert als Mirror von ghcr, Images sind die selben!**
 
