@@ -1,19 +1,22 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: opentelemetry-endpoint-config
+  name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
+  labels:
+    {{- include "tracing.labels" . | nindent 4 }}
+    app.kubernetes.io/component: opentelemetry-proxy
 data:
   nginx.conf: |
     server {
         listen 8080;
 
         location /v1/traces {
-            proxy_pass http://opentelemetry-collector:4318/v1/traces;
+            proxy_pass http://{{ include "tracing.fullname" . }}-opentelemetry-collector:4318/v1/traces;
 
-            add_header Access-Control-Allow-Origin "https://tracing-web-angular.apps.ocp-test.cloud.nuernberger.net";
+            add_header Access-Control-Allow-Origin "{{ .Values.opentelemetryProxy.cors.allowedOrigin }}";
             add_header Access-Control-Allow-Methods "POST, OPTIONS";
-            add_header Access-Control-Allow-Headers "*, content-type";
-            add_header Access-Control-Allow-Credentials true;
+            add_header Access-Control-Allow-Credentials "true";
+            add_header Access-Control-Allow-Headers "Origin, Content-Type, Accept";
 
             if ($request_method = 'OPTIONS') {
                 return 204;
@@ -24,34 +27,44 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opentelemetry-endpoint-deployment
+  name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
   labels:
-    app: opentelemetry-endpoint
+    {{- include "tracing.labels" . | nindent 4 }}
+    app.kubernetes.io/component: opentelemetry-proxy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: opentelemetry-endpoint
+      {{- include "tracing.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: opentelemetry-proxy
   template:
     metadata:
       labels:
-        app: opentelemetry-endpoint
+        {{- include "tracing.labels" . | nindent 8 }}
+        app.kubernetes.io/component: opentelemetry-proxy
     spec:
       containers:
-        - name: opentelemetry-endpoint
-          image: artifactory:5000/nginxinc/nginx-unprivileged:alpine
-          imagePullPolicy: Always
+        - name: opentelemetry-proxy
+          {{- if .Values.global.imageRegistry }}
+          image: "{{ .Values.global.imageRegistry }}/nginxinc/nginx-unprivileged:{{ .Values.opentelemetryProxy.imageTag | default .Values.defaultTag }}"
+          {{- else }}
+          image: "nginxinc/nginx-unprivileged:{{ .Values.opentelemetryProxy.imageTag | default .Values.defaultTag }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
             - containerPort: 8080
+              name: http
           volumeMounts:
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: nginx.conf
               readOnly: true
+          resources:
+            {{- toYaml .Values.opentelemetryProxy.resources | nindent 12 }}
       volumes:
         - name: nginx-conf
           configMap:
-            name: opentelemetry-endpoint-config
+            name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
             items:
               - key: nginx.conf
                 path: nginx.conf
@@ -59,34 +72,40 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: opentelemetry-endpoint-service
+  name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
   labels:
-    app: opentelemetry-endpoint
+    {{- include "tracing.labels" . | nindent 4 }}
+    app.kubernetes.io/component: opentelemetry-proxy
 spec:
   ports:
-    - name: http
-      port: 80
-      targetPort: 8080
+    - port: 80
+      name: http
+      targetPort: http
   selector:
-    app: opentelemetry-endpoint
+    {{- include "tracing.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: opentelemetry-proxy
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: opentelemetry-endpoint-ingress
+  name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
+  labels:
+    {{- include "tracing.labels" . | nindent 4 }}
+    app.kubernetes.io/component: opentelemetry-proxy
 spec:
-  ingressClassName: openshift-default
+  {{- if .Values.opentelemetryProxy.ingress.tls.enabled }}
   tls:
     - hosts:
-        - tracing-otel-collector.apps.ocp-test.cloud.nuernberger.net
-      secretName: nv-default-cert
+        - {{ .Values.opentelemetryProxy.ingress.host }}
+      secretName: {{ .Values.opentelemetryProxy.ingress.tls.secretName }}
+  {{- end }}
   rules:
-    - host: tracing-otel-collector.apps.ocp-test.cloud.nuernberger.net
+    - host: {{ .Values.opentelemetryProxy.ingress.host }}
       http:
         paths:
           - backend:
               service:
-                name: opentelemetry-endpoint-service
+                name: {{ include "tracing.fullname" . }}-opentelemetry-proxy
                 port:
                   name: http
             pathType: ImplementationSpecific

@@ -1,7 +1,9 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
-  name: instrumentation
+  name: {{ include "tracing.fullname" . }}
+  labels:
+    {{- include "tracing.labels" . | nindent 4 }}
 spec:
   env:
     - name: OTEL_METRICS_EXPORTER
@@ -10,7 +12,7 @@ spec:
       value: none
   exporter:
     # grpc endpoint
-    endpoint: http://opentelemetry-collector:4317
+    endpoint: http://{{ include "tracing.fullname" . }}-opentelemetry-collector:4317
   propagators:
     - tracecontext
     - baggage
@@ -21,10 +23,10 @@ spec:
   resource:
     addK8sUIDAttributes: true
   java:
-    image: artifactory:5000/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
-    env:
-      # java uses http exporter by default, so change endpoint to http
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://opentelemetry-collector:4318
+    {{- if .Values.global.imageRegistry }}
+    image: "{{ .Values.global.imageRegistry }}/open-telemetry/opentelemetry-operator/autoinstrumentation-java:{{ .Values.instrumentation.java.imageTag | default .Values.defaultTag }}"
+    {{- end }}
   nodejs:
-    image: artifactory:5000/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
+    {{- if .Values.global.imageRegistry }}
+    image: "{{ .Values.global.imageRegistry }}/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:{{ .Values.instrumentation.nodejs.imageTag | default .Values.defaultTag }}"
+    {{- end }}

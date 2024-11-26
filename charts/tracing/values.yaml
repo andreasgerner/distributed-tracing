@@ -1,7 +1,32 @@
+global:
+  imageRegistry:
+
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "tracing"
+
+defaultTag: "latest"
+imagePullPolicy: "IfNotPresent"
+
+opentelemetryProxy:
+  imageTag: "alpine"
+  resources: {}
+  cors:
+    allowedOrigin: ""
+  ingress:
+    tls:
+      enabled: false
+      secretName: ""
+    host: ""
+
+instrumentation:
+  java:
+    imageTag: ""
+  nodejs:
+    imageTag: ""
+
 
 elasticsearch:
+  fullnameOverride: tracing-elasticsearch
   master:
     masterOnly: false
     replicaCount: 1
@@ -29,16 +54,14 @@ elasticsearch:
     enabled: false
 
 jaeger:
-  global:
-    imageRegistry: artifactory:5000
-
+  fullnameOverride: tracing-jaeger
   provisionDataStore:
     cassandra: false
 
   storage:
     type: elasticsearch
     elasticsearch:
-      host: tracing-oc-elasticsearch
+      host: tracing-elasticsearch
       port: 9200
       scheme: http
       user: elastic
@@ -47,15 +70,7 @@ jaeger:
   query:
     service:
       targetPort: 16686
-    ingress:
-      enabled: true
-      ingressClassName: openshift-default
-      tls:
-        - hosts:
-            - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net
-          secretName: nv-default-cert
-      hosts:
-        - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net
+    ingress: {}
 
   collector:
     service:
@@ -66,4 +81,3 @@ jaeger:
         http:
           name: otlp-http
           port: 4138
-

@@ -1,0 +1,12 @@
+opentelemetryProxy:
+  cors:
+    allowedOrigin: "http://angular.localhost"
+  ingress:
+    host: "collector.localhost"
+
+jaeger:
+  query:
+    ingress:
+      enabled: true
+      hosts:
+        - jaeger.localhost

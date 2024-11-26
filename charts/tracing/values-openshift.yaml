@@ -1,0 +1,24 @@
+global:
+  imageRegistry: "artifactory:5000"
+
+imagePullPolicy: "Always"
+
+opentelemetryProxy:
+  cors:
+    allowedOrigin: "https://tracing-web-angular.apps.ocp-test.cloud.nuernberger.net"
+  ingress:
+    tls:
+      enabled: true
+      secretName: nv-default-cert
+    host: "tracing-collector.apps.ocp-test.cloud.nuernberger.net"
+
+jaeger:
+  query:
+    ingress:
+      enabled: true
+      tls:
+        - hosts:
+            - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net
+          secretName: nv-default-cert
+      hosts:
+        - tracing-jaeger.apps.ocp-test.cloud.nuernberger.net

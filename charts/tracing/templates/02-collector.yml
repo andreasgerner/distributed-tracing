@@ -1,7 +1,9 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: opentelemetry
+  name: {{ include "tracing.fullname" . }}-opentelemetry
+  labels:
+    {{- include "tracing.labels" . | nindent 4 }}
 spec:
   config:
     receivers:
@@ -21,7 +23,7 @@ spec:
       debug:
         verbosity: detailed
       otlp:
-        endpoint: "http://tracing-oc-jaeger-collector:4317"
+        endpoint: "http://{{ include "tracing.fullname" . }}-jaeger-collector:4317"
         tls:
           insecure: true
 
