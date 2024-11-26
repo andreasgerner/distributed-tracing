@@ -16,7 +16,7 @@ const provider = new WebTracerProvider({
 });
 
 provider.addSpanProcessor(new BatchSpanProcessor(new OTLPTraceExporter({
-  url: environment.otelTraceUrl,
+  url: environment.otelTraceUrl
 })));
 
 provider.register({
