@@ -26,6 +26,12 @@ spec:
     {{- if .Values.global.imageRegistry }}
     image: "{{ .Values.global.imageRegistry }}/open-telemetry/opentelemetry-operator/autoinstrumentation-java:{{ .Values.instrumentation.java.imageTag | default .Values.defaultTag }}"
     {{- end }}
+    env:
+      # java uses http exporter by default, so change endpoint to http
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://{{ include "tracing.fullname" . }}-opentelemetry-collector:4318
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: http/protobuf
   nodejs:
     {{- if .Values.global.imageRegistry }}
     image: "{{ .Values.global.imageRegistry }}/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:{{ .Values.instrumentation.nodejs.imageTag | default .Values.defaultTag }}"

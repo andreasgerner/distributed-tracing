@@ -72,6 +72,14 @@ jaeger:
       targetPort: 16686
     ingress: {}
 
+  agent:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
+
   collector:
     service:
       otlp:
