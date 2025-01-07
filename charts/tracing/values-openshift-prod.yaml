@@ -1,0 +1,116 @@
+autoscaling: &autoscaling
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPU: 80
+  targetMemory: 80
+
+global:
+  imageRegistry: "artifactory:5000"
+
+imagePullPolicy: "Always"
+
+opentelemetryCollector:
+  autoscaling:
+    *autoscaling
+
+opentelemetryProxy:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  autoscaling:
+    *autoscaling
+  cors:
+    allowedOrigin: "https://tracing-web-angular.apps.ocp-test.cloud.nuernberger.net"
+  ingress:
+    tls:
+      enabled: true
+      secretName: "nv-default-cert"
+    host: "tracing-collector.apps.ocp-test.cloud.nuernberger.net"
+
+elasticsearch:
+  master:
+    masterOnly: true
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 400m
+        memory: 768Mi
+    autoscaling:
+      *autoscaling
+  data:
+    resources:
+      requests:
+        cpu: 150m
+        memory: 1Gi
+      limits:
+        cpu: 300m
+        memory: 1.5Gi
+    autoscaling:
+      *autoscaling
+  coordinating:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 200m
+        memory: 768Mi
+    autoscaling:
+      *autoscaling
+  ingest:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 200m
+        memory: 768Mi
+    autoscaling:
+      *autoscaling
+
+jaeger:
+  collector:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 256Mi
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+  agent:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  query:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 256Mi
+    ingress:
+      enabled: true
+      tls:
+        - hosts:
+            - "tracing-jaeger.apps.ocp-test.cloud.nuernberger.net"
+          secretName: "nv-default-cert"
+      hosts:
+        - "tracing-jaeger.apps.ocp-test.cloud.nuernberger.net"
