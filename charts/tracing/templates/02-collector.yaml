@@ -5,6 +5,14 @@ metadata:
   labels:
     {{- include "tracing.labels" . | nindent 4 }}
 spec:
+  managementState: managed
+  {{- if .Values.opentelemetryCollector.autoscaling.enabled }}
+  autoscaler:
+      minReplicas: {{ .Values.opentelemetryCollector.autoscaling.minReplicas }}
+      maxReplicas: {{ .Values.opentelemetryCollector.autoscaling.maxReplicas }}
+      targetCPUUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetCPU }}
+      targetMemoryUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetMemory }}
+  {{- end }}
   config:
     receivers:
       otlp:
@@ -20,10 +28,8 @@ spec:
         timeout: 10s
 
     exporters:
-      debug:
-        verbosity: detailed
       otlp:
-        endpoint: "http://{{ include "tracing.fullname" . }}-jaeger-collector:4317"
+        endpoint: "http://{{ include "tracing.fullname" . }}-jaeger-collector.{{ .Release.Namespace }}.svc.cluster.local:4317"
         tls:
           insecure: true
 
@@ -32,4 +38,4 @@ spec:
         traces:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlp,debug]
+          exporters: [otlp]

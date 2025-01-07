@@ -12,7 +12,7 @@ spec:
       value: none
   exporter:
     # grpc endpoint
-    endpoint: http://{{ include "tracing.fullname" . }}-opentelemetry-collector:4317
+    endpoint: http://{{ include "tracing.fullname" . }}-opentelemetry-collector.{{ .Release.Namespace }}.svc.cluster.local:4317
   propagators:
     - tracecontext
     - baggage
@@ -29,7 +29,7 @@ spec:
     env:
       # java uses http exporter by default, so change endpoint to http
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://{{ include "tracing.fullname" . }}-opentelemetry-collector:4318
+        value: http://{{ include "tracing.fullname" . }}-opentelemetry-collector.{{ .Release.Namespace }}.svc.cluster.local:4318
       - name: OTEL_EXPORTER_OTLP_PROTOCOL
         value: http/protobuf
   nodejs:
