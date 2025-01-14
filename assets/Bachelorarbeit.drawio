@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15" version="26.0.4" pages="6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15" version="26.0.4" pages="7">
   <diagram id="hJiNWwrClcbxFBkgTaPY" name="Architektur">
     <mxGraphModel dx="1434" dy="866" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -577,6 +577,92 @@
         </mxCell>
         <mxCell id="PcxdlqtsukQp2kZS6wYr-7" value="Storage" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="440" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fnJU-q93ncl0wRHYhs2n" name="Collector">
+    <mxGraphModel dx="1811" dy="694" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ivv1uB0C9MQZ9_9LUgyp-1" value="OpenTelemetry Collector" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="220" y="410" width="440" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-1" value="OTLP Receiver" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="460" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-2" value="Batch Processor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="460" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-3" value="OTLP Exporter" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="460" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-6" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=deploy" vertex="1" parent="1">
+          <mxGeometry x="630" y="384" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-8" value="4317/gRPC&lt;div&gt;4318/HTTP&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="358" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-7" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=svc" vertex="1" parent="1">
+          <mxGeometry x="250" y="330" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="vf0xlRgdLaKHPN0cgidj-10" target="vf0xlRgdLaKHPN0cgidj-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-19" value="OTLP Spans" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="vf0xlRgdLaKHPN0cgidj-18">
+          <mxGeometry x="-0.0552" y="-1" relative="1" as="geometry">
+            <mxPoint x="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-10" value="Reverse Proxy&lt;div&gt;NGINX&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="220" y="138" width="440" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-11" value="8080/HTTP" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="88" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-12" value="Public URL" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-5" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=ing" vertex="1" parent="1">
+          <mxGeometry x="190" y="10" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-13" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=svc" vertex="1" parent="1">
+          <mxGeometry x="250" y="58" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-14" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=deploy" vertex="1" parent="1">
+          <mxGeometry x="630" y="106" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-16" value="Add Headers for CORS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-17" value="Proxy to Service" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-25" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="-80" y="159" width="120" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-22" value="Public Internet" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="vf0xlRgdLaKHPN0cgidj-25">
+          <mxGeometry width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-23" value="Applications in Cluster" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="vf0xlRgdLaKHPN0cgidj-25">
+          <mxGeometry y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="vf0xlRgdLaKHPN0cgidj-22" target="vf0xlRgdLaKHPN0cgidj-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-28" value="OTLP Spans" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="vf0xlRgdLaKHPN0cgidj-26">
+          <mxGeometry x="-0.026" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-27" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="vf0xlRgdLaKHPN0cgidj-23" target="vf0xlRgdLaKHPN0cgidj-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vf0xlRgdLaKHPN0cgidj-29" value="OTLP Spans" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="vf0xlRgdLaKHPN0cgidj-27">
+          <mxGeometry x="-0.1302" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
