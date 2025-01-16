@@ -17,8 +17,7 @@ spec:
     - tracecontext
     - baggage
   sampler:
-    type: parentbased_traceidratio
-    argument: "1"
+    type: parentbased_always_on
   resource:
     addK8sUIDAttributes: true
   java:
