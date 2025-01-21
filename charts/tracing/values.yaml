@@ -69,10 +69,8 @@ jaeger:
       user: elastic
       password: j43g3r2024
 
-  query:
-    service:
-      targetPort: 16686
-    ingress: {}
+  agent:
+    enabled: false
 
   collector:
     service:
@@ -80,4 +78,11 @@ jaeger:
         grpc:
           name: otlp-grpc
           port: 4317
+        http:
+          name: otlp-http
+          port: 4318
 
+  query:
+    service:
+      targetPort: 16686
+    ingress: {}

@@ -8,10 +8,10 @@ spec:
   managementState: managed
   {{- if .Values.opentelemetryCollector.autoscaling.enabled }}
   autoscaler:
-      minReplicas: {{ .Values.opentelemetryCollector.autoscaling.minReplicas }}
-      maxReplicas: {{ .Values.opentelemetryCollector.autoscaling.maxReplicas }}
-      targetCPUUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetCPU }}
-      targetMemoryUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetMemory }}
+    minReplicas: {{ .Values.opentelemetryCollector.autoscaling.minReplicas }}
+    maxReplicas: {{ .Values.opentelemetryCollector.autoscaling.maxReplicas }}
+    targetCPUUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetCPU }}
+    targetMemoryUtilization: {{ .Values.opentelemetryCollector.autoscaling.targetMemory }}
   {{- end }}
   config:
     receivers:

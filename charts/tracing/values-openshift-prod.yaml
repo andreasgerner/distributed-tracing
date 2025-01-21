@@ -1,7 +1,7 @@
 autoscaling: &autoscaling
   enabled: true
   minReplicas: 1
-  maxReplicas: 1
+  maxReplicas: 3
   targetCPU: 80
   targetMemory: 80
 
@@ -87,17 +87,9 @@ jaeger:
     autoscaling:
       enabled: true
       minReplicas: 1
-      maxReplicas: 5
+      maxReplicas: 3
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
-  agent:
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi
   query:
     resources:
       requests:
