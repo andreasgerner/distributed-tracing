@@ -111,13 +111,13 @@
         <mxCell id="x_8Z25N510f7iWhDpwh--37" value="flow of OpenTelemetry data and traces" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="70" y="519.12" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="opeWMdb_MlhB8gXuTb6l-1" value="mssql-company" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="opeWMdb_MlhB8gXuTb6l-1" value="mssql-company/&lt;div&gt;h2-company&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="720" y="290" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="opeWMdb_MlhB8gXuTb6l-4" value="&amp;lt;&amp;lt; outside of cluster &amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="opeWMdb_MlhB8gXuTb6l-4" value="(&amp;lt;&amp;lt; outside of cluster &amp;gt;&amp;gt;)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="710" y="176" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="axiSkf-lnLj4irAyco31-1" value="mssql-payment" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="axiSkf-lnLj4irAyco31-1" value="mssql-payment/&lt;div&gt;h2-payment&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="720" y="200" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="kNIppeCJaW0pj7HFn36Y-2" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="kNIppeCJaW0pj7HFn36Y-1" target="x_8Z25N510f7iWhDpwh--4" edge="1">
@@ -135,7 +135,7 @@
         <mxCell id="LoQ2UR36ufPyHZ7plVl1-2" value="ingress-nginx" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="80" y="380" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="fkxV3cmfwuEiEfEEQug7-1" value="&amp;lt;&amp;lt; outside of cluster &amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="fkxV3cmfwuEiEfEEQug7-1" value="(&amp;lt;&amp;lt; outside of cluster &amp;gt;&amp;gt;)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="710" y="265" width="140" height="30" as="geometry" />
         </mxCell>
       </root>
