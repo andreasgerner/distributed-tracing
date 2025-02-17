@@ -3,8 +3,6 @@
 Dieses Repository enthält alle Informationen über meine Bachelorarbeit zu Distributed Tracing, die zusammen mit der
 NÜRNBERGER Versicherung entsteht.
 
-**🚧 Work in Progress:** Die Arbeit ist noch nicht abgeschlossen!
-
 ## 📚 Kapitel
 
 * [🧪 Proof of Concept in einem lokalen k8s-Cluster](#-proof-of-concept-in-einem-lokalen-k8s-cluster)
